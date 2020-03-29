@@ -9,6 +9,8 @@ public class BirdObstacle extends Obstacle {
 	public BirdHeight birdHeight;
 	public int state;
 	
+	private int counter = 5;
+	
 	public BirdObstacle(float x, float y, BirdHeight birdHeight) {
 		super(x, y);
 		this.type = ObstacleType.BIRD;
@@ -33,6 +35,10 @@ public class BirdObstacle extends Obstacle {
 	@Override
 	public void update() {
 		super.update();
-		this.state ^= 1;
+		this.counter--;
+		if (this.counter <= 0) {
+			this.state ^= 1;
+			this.counter = 5;
+		}
 	}
 }

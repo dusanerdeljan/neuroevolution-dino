@@ -117,6 +117,8 @@ public class DinoGame extends PApplet {
 		tickCount = 0;
 		agent.evolvePopulation();
 		score = 0;
+		this.spawnRate = 140;
+		Obstacle.VELOCITY = -10;
 	}
 	
 	private void checkCollision(Obstacle obstacle, Dino dino) {
