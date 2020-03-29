@@ -5,6 +5,8 @@ import java.util.List;
 
 import game.factory.DinoFactory;
 import game.factory.ObstacleFactory;
+import game.model.CactusObstacle;
+import game.model.CactusObstacle.CactusType;
 import game.model.Dino;
 import game.model.Obstacle;
 import game.model.Obstacle.ObstacleType;
@@ -15,6 +17,7 @@ import neuroevolution.neuralnetwork.NeuralNetwork;
 import neuroevolution.neuralnetwork.Neuron;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 import util.Screen;
 
 public class DinoGame extends PApplet {
@@ -25,6 +28,7 @@ public class DinoGame extends PApplet {
 	int groundLevel;
 	int tickCount = 0;
 	int spawnRate = 140;
+	int minSpawnRate = 80;
 	int speedupRate = 1000;
 	
 	int score = 0;
@@ -32,7 +36,12 @@ public class DinoGame extends PApplet {
 	int speed = 1;
 	int maxSpeed = 10;
 	
-	PFont dinoFont;
+	PImage dinoImage;
+	PImage cactusLargeImage;
+	PImage birdImage;
+	PImage cactusMediumImage;
+	PImage cactusSmallImage;
+	PImage groundImage;
 	
 	@Override
 	public void settings() {
@@ -49,7 +58,11 @@ public class DinoGame extends PApplet {
 	public void setup() {
 		clearScreen();
 		surface.setTitle("Neuroevolution Chrome Dino");
-		dinoFont = createFont("resources/font/pixelmix.ttf", 22);
+		cactusLargeImage = loadImage("resources/cactusLarge.png");
+		cactusMediumImage = loadImage("resources/cactusMedium.png");
+		cactusSmallImage = loadImage("resources/cactusSmall.png");
+		birdImage = loadImage("resources/enemy1.png");
+		groundImage = loadImage("resources/ground.png");
 	}
 	
 	@Override
@@ -57,8 +70,8 @@ public class DinoGame extends PApplet {
 		for (int i = 0; i < speed; i++) {
 			this.tickCount++;
 			this.clearScreen();
-			this.renderGround();
 			this.drawGenerationInfo();
+			this.renderGround();
 			this.obstacles.forEach(obstacle -> this.renderObstacle(obstacle));
 			this.agent.population.genomes.forEach(genome -> this.renderDino(genome.dino));
 			this.renderNeuralNetwork(this.agent.getBestGenome().cactusNet, 800);
@@ -75,7 +88,7 @@ public class DinoGame extends PApplet {
 			
 			if (tickCount % speedupRate == 0) {
 				Obstacle.speedUp();
-				this.spawnRate = Math.max(this.spawnRate-2, 100);
+				this.spawnRate = Math.max(this.spawnRate-2, this.minSpawnRate);
 			}
 			
 			this.obstacles.forEach(obstacle -> obstacle.update());
@@ -129,17 +142,26 @@ public class DinoGame extends PApplet {
 		stroke(0);
 		strokeWeight(1);
 		if (obstacle.type == ObstacleType.BIRD) {
-			fill(0, 255, 0);
+			image(birdImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
 		} else {
-			fill(255, 0, 0);
+			this.renderObstacle((CactusObstacle) obstacle);
 		}
-		rect(obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+	}
+	
+	private void renderObstacle(CactusObstacle obstacle) {
+		if (obstacle.cactusType == CactusType.LARGE) {
+			image(cactusLargeImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+		} else if (obstacle.cactusType == CactusType.MEDIUM) {
+			image(cactusMediumImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+		} else {
+			image(cactusSmallImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+		}
 	}
 	
 	private void drawGenerationInfo() {
 		score = this.agent.getBestScore();
 		highscore = Math.max(score, highscore);
-		textFont(dinoFont);
+		textSize(22);
 		fill(0);
 		text("Score: " + score, 20, 50);
 		text("Generation: " + agent.generation, 20, 80);
@@ -192,9 +214,7 @@ public class DinoGame extends PApplet {
 	}
 	
 	private void renderGround() {
-		stroke(0);
-		strokeWeight(4);
-		line(0, this.groundLevel, width, this.groundLevel);
+		image(groundImage, 0, this.groundLevel-10, width, 20);
 	}
 	
 	private void clearScreen() {
