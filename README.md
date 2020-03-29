@@ -1,6 +1,8 @@
 # neuroevolution-dino
 Using artificial neural networks and genetic algorithm to train bot to play Chrome Dino game.
 
+<img src="resources/screenshot.png" width="100%">
+
 ## Neural network architecture
 
 Each dino in the population has 2 neural networks:
