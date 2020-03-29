@@ -5,6 +5,7 @@ import java.util.List;
 
 import game.factory.DinoFactory;
 import game.factory.ObstacleFactory;
+import game.model.BirdObstacle;
 import game.model.CactusObstacle;
 import game.model.CactusObstacle.CactusType;
 import game.model.Dino;
@@ -39,6 +40,7 @@ public class DinoGame extends PApplet {
 	PImage dinoImage;
 	PImage cactusLargeImage;
 	PImage birdImage;
+	PImage birdSecondImage;
 	PImage cactusMediumImage;
 	PImage cactusSmallImage;
 	PImage groundImage;
@@ -63,6 +65,7 @@ public class DinoGame extends PApplet {
 		cactusSmallImage = loadImage("resources/cactusSmall.png");
 		birdImage = loadImage("resources/enemy1.png");
 		groundImage = loadImage("resources/ground.png");
+		birdSecondImage = loadImage("resources/enemy2.png");
 	}
 	
 	@Override
@@ -142,9 +145,17 @@ public class DinoGame extends PApplet {
 		stroke(0);
 		strokeWeight(1);
 		if (obstacle.type == ObstacleType.BIRD) {
-			image(birdImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+			this.renderObstacle((BirdObstacle) obstacle);
 		} else {
 			this.renderObstacle((CactusObstacle) obstacle);
+		}
+	}
+	
+	private void renderObstacle(BirdObstacle obstacle) {
+		if (obstacle.state == 0) {
+			image(birdImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
+		} else {
+			image(birdSecondImage, obstacle.x, obstacle.y - obstacle.height, obstacle.width, obstacle.height);
 		}
 	}
 	

@@ -7,6 +7,7 @@ public class BirdObstacle extends Obstacle {
 	}
 	
 	public BirdHeight birdHeight;
+	public int state;
 	
 	public BirdObstacle(float x, float y, BirdHeight birdHeight) {
 		super(x, y);
@@ -29,4 +30,9 @@ public class BirdObstacle extends Obstacle {
 		}
 	}
 	
+	@Override
+	public void update() {
+		super.update();
+		this.state ^= 1;
+	}
 }
