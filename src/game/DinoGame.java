@@ -17,7 +17,6 @@ import neuroevolution.neuralnetwork.Layer;
 import neuroevolution.neuralnetwork.NeuralNetwork;
 import neuroevolution.neuralnetwork.Neuron;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
 import util.Screen;
 
@@ -37,7 +36,10 @@ public class DinoGame extends PApplet {
 	int speed = 1;
 	int maxSpeed = 10;
 	
-	PImage dinoImage;
+	PImage dinoRun1Image;
+	PImage dinoRun2Image;
+	PImage dinoDuckImage;
+	PImage dinoJumpImage;
 	PImage cactusLargeImage;
 	PImage birdImage;
 	PImage birdSecondImage;
@@ -66,6 +68,10 @@ public class DinoGame extends PApplet {
 		birdImage = loadImage("resources/enemy1.png");
 		groundImage = loadImage("resources/ground.png");
 		birdSecondImage = loadImage("resources/enemy2.png");
+		dinoRun1Image = loadImage("resources/dinoRun1.png");
+		dinoRun2Image = loadImage("resources/dinoRun2.png");
+		dinoJumpImage = loadImage("resources/dinoJump.png");
+		dinoDuckImage = loadImage("resources/dinoDuck.png");
 	}
 	
 	@Override
@@ -77,7 +83,7 @@ public class DinoGame extends PApplet {
 			this.renderGround();
 			this.obstacles.forEach(obstacle -> this.renderObstacle(obstacle));
 			this.agent.population.genomes.forEach(genome -> this.renderDino(genome.dino));
-			this.renderNeuralNetwork(this.agent.getBestGenome().cactusNet, 800);
+			this.renderNeuralNetwork(this.agent.getBestGenome().cactusNet, 850);
 			this.renderNeuralNetwork(this.agent.getBestGenome().birdNet, 1100);
 			this.obstacles.removeIf(obstacle -> obstacle.isInvisible());
 			for (Genotype genome: this.agent.population.genomes) {
@@ -136,16 +142,26 @@ public class DinoGame extends PApplet {
 	
 	private void renderDino(Dino dino) {
 		if (!dino.isDead) {
-			stroke(0);
-			strokeWeight(1);
-			fill(0, 0, 255, 50);
-			rect(dino.x, dino.y-dino.height, dino.width, dino.height);
+			if (agent.alive > 1) {
+				stroke(0);
+				strokeWeight(1);
+				fill(125, 125, 125, 50);
+				rect(dino.x, dino.y-dino.height, dino.width, dino.height);
+			} else {
+				if (dino.isDucking) {
+					image(dinoDuckImage, dino.x, dino.y-dino.height, dino.width, dino.height);
+				} else if (dino.y < this.groundLevel) {
+					image(dinoJumpImage, dino.x, dino.y-dino.height, dino.width, dino.height);
+				} else if (dino.state == 0) {
+					image(dinoRun1Image, dino.x, dino.y-dino.height, dino.width, dino.height);
+				} else {
+					image(dinoRun2Image, dino.x, dino.y-dino.height, dino.width, dino.height);
+				}
+			}
 		}
 	}
 	
 	private void renderObstacle(Obstacle obstacle) {
-		stroke(0);
-		strokeWeight(1);
 		if (obstacle.type == ObstacleType.BIRD) {
 			this.renderObstacle((BirdObstacle) obstacle);
 		} else {
@@ -184,11 +200,11 @@ public class DinoGame extends PApplet {
 	}
 	
 	private void renderNeuralNetwork(NeuralNetwork net, float beginx) {
-		int beginy = 20;
-		int yspan = 340;
+		int beginy = 0;
+		int yspan = 300;
 		int layerSpace = 80;
 		int neuronSpace = 10;
-		int layerWidth = 25;
+		int layerWidth = 15;
 		ellipseMode(CENTER);
 		for (int i = 1; i < net.layers.size(); i++) {
 			Layer prevLayer = net.layers.get(i-1);

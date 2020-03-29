@@ -16,7 +16,7 @@ public class BirdObstacle extends Obstacle {
 		this.type = ObstacleType.BIRD;
 		this.birdHeight = birdHeight;
 		this.width = 100;
-		this.height = 40;
+		this.height = 60;
 		switch (birdHeight) {
 		case LOW:
 			this.y -= 20;

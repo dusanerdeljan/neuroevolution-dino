@@ -18,10 +18,12 @@ public class Dino {
 	public boolean isDucking = false;
 	public NeuralNetwork cactusNet;
 	public NeuralNetwork birdNet;
+	public int state = 0;
 	
 	private int JUMP = 0;
 	private int DUCK = 1;
 	private int DO_NOTHING = 2;
+	private int counter = 3;
 	
 	public Dino(float x, float y) {
 		this.x = x;
@@ -68,6 +70,11 @@ public class Dino {
 	
 	public void update() {
 		this.score++;
+		this.counter--;
+		if (this.counter <= 0) {
+			this.state ^= 1;
+			this.counter = 3;
+		}
 		this.gravity += this.velocity;
 		this.y = Math.min(this.y + this.gravity, this.groundLevel);
 	}
