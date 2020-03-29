@@ -6,7 +6,6 @@ import java.util.List;
 import game.factory.DinoFactory;
 import game.model.Dino;
 import game.model.Obstacle;
-import neuroevolution.neuralnetwork.NeuralNetwork;
 
 public class GeneticAlgorithm {
 	

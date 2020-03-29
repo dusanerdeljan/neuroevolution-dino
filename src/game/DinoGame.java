@@ -15,6 +15,7 @@ import neuroevolution.neuralnetwork.NeuralNetwork;
 import neuroevolution.neuralnetwork.Neuron;
 import processing.core.PApplet;
 import processing.core.PFont;
+import util.Screen;
 
 public class DinoGame extends PApplet {
 	
@@ -36,6 +37,7 @@ public class DinoGame extends PApplet {
 	@Override
 	public void settings() {
 		size(1366, 768);
+		Screen.setDimensions(width, height);
 		this.groundLevel = height - 100;
 		this.obstacles = new LinkedList<Obstacle>();
 		DinoFactory.init(100, this.groundLevel);

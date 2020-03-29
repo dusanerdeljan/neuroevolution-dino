@@ -1,6 +1,7 @@
 package game.model;
 
 import neuroevolution.neuralnetwork.NeuralNetwork;
+import util.Screen;
 
 public class Dino {
 	
@@ -26,7 +27,6 @@ public class Dino {
 		this.x = x;
 		this.y = y;
 		this.groundLevel = y;
-		//this.net = new NeuralNetwork(6, 10, 3);
 		this.cactusNet = new NeuralNetwork(5, 8, 2);
 		this.birdNet = new NeuralNetwork(6, 10, 3);
 	}
@@ -79,42 +79,15 @@ public class Dino {
 			} else {
 				this.feed((BirdObstacle) closestObstacle, distance);
 			}
-//			float[] inputs = {
-//				distance / 1366,
-//				closestObstacle.height / 768,
-//				closestObstacle.width / 1366,
-//				closestObstacle.y / 768,
-//				this.y / 768,
-//				Obstacle.VELOCITY / Obstacle.MAX_VELOCITY
-//			};
-//			int behaviour = this.net.argmax(inputs);
-//			if (closestObstacle instanceof BirdObstacle) {
-//				BirdObstacle obstacle = (BirdObstacle) closestObstacle;
-//				if (obstacle.birdHeight == BirdHeight.HIGH) {
-//					if (Math.random() < 0.5) {
-//						this.duck();
-//					} else {
-//						this.standUp();
-//					}
-//					return;
-//				}
-//			}
-//			if (behaviour == JUMP) {
-//				this.jump();
-//			} else if (behaviour == DUCK) {
-//				this.duck();
-//			} else if (behaviour == DO_NOTHING) {
-//				this.standUp();
-//			}
 		}
 	}
 	
 	private void feed(CactusObstacle closestObstacle, float distance) {
 		float[] inputs = {
-				distance / 1366,
-				closestObstacle.height / 768,
-				closestObstacle.width / 1366,
-				this.y / 768,
+				distance / Screen.WIDTH,
+				closestObstacle.height / Screen.HEIGHT,
+				closestObstacle.width / Screen.WIDTH,
+				this.y / Screen.HEIGHT,
 				Obstacle.VELOCITY / Obstacle.MAX_VELOCITY
 			};
 		int argmax = this.cactusNet.argmax(inputs);
@@ -127,11 +100,11 @@ public class Dino {
 	
 	private void feed(BirdObstacle closestObstacle, float distance) {
 		float[] inputs = {
-				distance / 1366,
-				closestObstacle.height / 768,
-				closestObstacle.width / 1366,
-				closestObstacle.y / 768,
-				this.y / 768,
+				distance / Screen.WIDTH,
+				closestObstacle.height / Screen.HEIGHT,
+				closestObstacle.width / Screen.WIDTH,
+				closestObstacle.y / Screen.HEIGHT,
+				this.y / Screen.HEIGHT,
 				Obstacle.VELOCITY / Obstacle.MAX_VELOCITY
 			};
 		int argmax = this.birdNet.argmax(inputs);
