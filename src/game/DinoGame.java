@@ -97,7 +97,6 @@ public class DinoGame extends PApplet {
 			
 			if (tickCount % speedupRate == 0) {
 				Obstacle.speedUp();
-				this.spawnRate = Math.max(this.spawnRate-2, this.minSpawnRate);
 			}
 			
 			this.obstacles.forEach(obstacle -> obstacle.update());
@@ -124,7 +123,6 @@ public class DinoGame extends PApplet {
 		agent.evolvePopulation();
 		score = 0;
 		this.spawnRate = 140;
-		Obstacle.VELOCITY = -10;
 	}
 	
 	private void checkCollision(Obstacle obstacle, Dino dino) {
